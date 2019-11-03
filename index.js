@@ -1,6 +1,7 @@
 var express = require("express");
 var mongoose = require("mongoose");
 var bodyParser = require("body-parser"); //body-parser module을 bodyParser 변수에 담는다.
+var methodOverride = require("method-override");
 var app = express();
 
 require('dotenv').config(); // .env파일에서 환경변수 불러오기
@@ -27,6 +28,7 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname+"/public"));
 app.use(bodyParser.json()); //form data를 req.body에 옮겨 담는다. json data
 app.use(bodyParser.urlencoded({extended:true})); 
+app.use(methodOverride("_method"));
 
 //DB schema //db에서 사용할 schema object 생성.
 var contactSchema = mongoose.Schema({
@@ -61,6 +63,31 @@ app.post("/contacts", function(req,res){ //contacts/new 에서 폼을 전달받�
         if(err) return res.json(err);
         res.redirect("/contacts");
     });
+});
+
+//Contacts-Show
+app.get("/contacts/:id", function(req,res){
+    Contact.findOne({_id:req.params.id}, function(err,contact){
+        if(err) return res.json(err);
+        res.render("contacts/show", {contact:contact});})
+});
+
+//Contacts-edit
+app.get("/contacts/:id/edit", function(req,res){
+    Contact.findOne({_id:req.params.id}, function(err,contact){
+        if(err) return res.json(err); res.render("contacts/edit", {contact:contact});    })
+});
+
+//Contacts-update
+app.put("/contacts/:id", function(req,res){
+    Contact.findOneAndUpdate({_id:req.params.id}, req.body, function(err,contact){
+        if(err) return res.json(err); res.redirect("/contacts/"+req.params.id);    })
+});
+
+//Contacts-destroy
+app.delete("/contacts/:id", function(req,res){
+    Contact.deleteOne({_id:params.id}, function(err,contact){
+        if(err) return res.json(err); res.redirect("/contacts");    })
 });
 
 //port setting
