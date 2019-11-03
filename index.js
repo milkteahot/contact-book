@@ -28,7 +28,7 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname+"/public"));
 app.use(bodyParser.json()); //form data를 req.body에 옮겨 담는다. json data
 app.use(bodyParser.urlencoded({extended:true})); 
-app.use(methodOverride("_method"));
+app.use(methodOverride("_method")); //_method query로 들어오는 값으로 http method를 바꾼다.
 
 //DB schema //db에서 사용할 schema object 생성.
 var contactSchema = mongoose.Schema({
