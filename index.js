@@ -80,13 +80,13 @@ app.get("/contacts/:id/edit", function(req,res){
 
 //Contacts-update
 app.put("/contacts/:id", function(req,res){
-    Contact.findOneAndUpdate({_id:req.params.id}, req.body, function(err,contact){
+    Contact.findOneAndUpdate({_id:req.params.id}, req.body, function(err,contact){ //해당 모델의 document를 찾아 그 data를 수정. (찾을 조건, 업데이트할정보, 콜백함수)
         if(err) return res.json(err); res.redirect("/contacts/"+req.params.id);    })
 });
 
 //Contacts-destroy
 app.delete("/contacts/:id", function(req,res){
-    Contact.deleteOne({_id:params.id}, function(err,contact){
+    Contact.deleteOne({_id:req.params.id}, function(err,contact){
         if(err) return res.json(err); res.redirect("/contacts");    })
 });
 
